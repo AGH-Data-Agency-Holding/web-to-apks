@@ -215,9 +215,9 @@
     "icon": "fa-gamepad",
     "desc": "Jeux d'arcade et défis réflexes pour toute la famille.",
     "url": "https://download.datagenere.com/apks/fun-rush-latest.apk",
-    "available": false,
-    "size_mb": null,
-    "last_modified": null
+    "available": true,
+    "size_mb": 59.2,
+    "last_modified": "Fri, 27 Nov 2026 17:20:54 GMT"
   },
   {
     "name": "Tontine",
