@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGH Apps Hub | Catalogue APK Cloudflare R2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-hero {
+      background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+    }
+    .card-glow:hover {
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- HEADER -->
+  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-layer-group text-white text-lg"></i>
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-wide text-white">AGH <span class="text-brand-400 font-normal">Apps Hub</span></span>
+          <p class="text-xs text-slate-400">CDN Cloudflare R2 • Espace Affiliés & Marketing</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          CDN En Ligne (19/24 Apps)
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="gradient-hero border-b border-slate-800/60 pt-10 pb-8 px-4">
+    <div class="max-w-4xl mx-auto text-center space-y-4">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+        Catalogue Officiel des APKs <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-300">Non-Google</span>
+      </h1>
+      <p class="text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Téléchargez directement les builds APK autonomes hébergés sur notre CDN haute vitesse Cloudflare R2. Copiez les liens permanents en un clic pour vos sites d'affiliation et campagnes d'acquisition.
+      </p>
+
+      <!-- BARRE DE RECHERCHE & FILTRES -->
+      <div class="pt-4 max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
+          <input type="text" id="searchInput" placeholder="Rechercher une application (ex: Quran, Study, Bio...)" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+        </div>
+        <select id="catSelect" class="bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-brand-500">
+          <option value="ALL">Toutes les catégories</option>
+          <option value="Spiritualité">Spiritualité</option>
+          <option value="Santé">Santé & Bien-être</option>
+          <option value="AI">Intelligence Artificielle</option>
+          <option value="Cuisine">Cuisine</option>
+          <option value="Éducation">Éducation</option>
+          <option value="Autre">Autres</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTE DES APPLICATIONS -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+    <div class="flex items-center justify-between mb-4">
+      <span id="resultsCount" class="text-xs text-slate-400 font-medium">Chargement des applications...</span>
+      <div class="text-xs text-slate-500">
+        <i class="fa-solid fa-bolt text-amber-400"></i> Téléchargements directs illimités
+      </div>
+    </div>
+
+    <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Les cartes seront injectées en JS -->
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-slate-700 text-slate-200 text-xs px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2 z-50">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">Lien copié dans le presse-papiers !</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
+    <p>© 2026 AGH Data Agency Holding. Hébergement haute disponibilité sur Cloudflare R2 (<code class="text-slate-400">download.datagenere.com</code>).</p>
+  </footer>
+
+  <script>
+    let APPS = [];
+
+    // Chargement dynamique des données
+    async function loadApps() {
+      try {
+        const res = await fetch("apps.json");
+        APPS = await res.json();
+        renderGrid();
+      } catch (e) {
+        console.error("Erreur chargement apps.json:", e);
+      }
+    }
+
+    function renderGrid() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const cat = document.getElementById("catSelect").value;
+      const grid = document.getElementById("appsGrid");
+      grid.innerHTML = "";
+
+      const filtered = APPS.filter(a => {
+        const matchSearch = a.name.toLowerCase().includes(search) || a.slug.toLowerCase().includes(search) || a.desc.toLowerCase().includes(search);
+        let matchCat = true;
+        if (cat !== "ALL") {
+          matchCat = a.cat.toLowerCase().includes(cat.toLowerCase());
+        }
+        return matchSearch && matchCat;
+      });
+
+      document.getElementById("resultsCount").innerText = `${filtered.length} application(s) trouvée(s)`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500 text-sm italic">Aucune application ne correspond à votre recherche.</div>`;
+        return;
+      }
+
+      filtered.forEach(app => {
+        const card = document.createElement("div");
+        card.className = "bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 card-glow hover:border-slate-700";
+
+        const statusBadge = app.available 
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><i class="fa-solid fa-check text-[9px] mr-1"></i>En ligne (${app.size_mb} Mo)</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20"><i class="fa-solid fa-clock text-[9px] mr-1"></i>En attente build</span>`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-400 text-lg shadow-inner">
+                <i class="fa-solid ${app.icon || 'fa-cube'}"></i>
+              </div>
+              ${statusBadge}
+            </div>
+
+            <h3 class="font-bold text-white text-base mb-1">${app.name}</h3>
+            <p class="text-xs text-brand-400/90 font-mono mb-2">${app.slug}</p>
+            <p class="text-xs text-slate-400 line-clamp-2 mb-4">${app.desc}</p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800/80 flex items-center gap-2">
+            ${app.available ? `
+              <a href="${app.url}" download class="flex-1 py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 shadow-md shadow-brand-500/20">
+                <i class="fa-solid fa-download"></i>
+                <span>Télécharger</span>
+              </a>
+              <button onclick="copyLink('${app.url}')" title="Copier le lien direct pour affiliation" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs border border-slate-700 transition flex items-center justify-center gap-1">
+                <i class="fa-regular fa-copy"></i>
+                <span class="hidden sm:inline">Lien</span>
+              </button>
+            ` : `
+              <button disabled class="w-full py-2 px-3 rounded-xl bg-slate-800 text-slate-500 font-medium text-xs cursor-not-allowed">
+                Bientôt disponible
+              </button>
+            `}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function copyLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast("Lien APK copié dans le presse-papiers !");
+      }).catch(() => {
+        const input = document.createElement("input");
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+        showToast("Lien APK copié !");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").innerText = msg;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 2500);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderGrid);
+    document.getElementById("catSelect").addEventListener("change", renderGrid);
+
+    loadApps();
+  </script>
+</body>
+</html>
